@@ -1,0 +1,1 @@
+GenshinLauncher
