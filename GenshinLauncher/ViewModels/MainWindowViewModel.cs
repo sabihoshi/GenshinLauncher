@@ -35,18 +35,19 @@ namespace GenshinLauncher.ViewModels
         public void LaunchGame()
         {
             var client = Client
-               .WithArguments(args => args
-                   .Add("-screen-width").Add(Resolution.Width)
-                   .Add("-screen-height").Add(Resolution.Height)
-                   .Add("-screen-fullscreen").Add(Fullscreen ? 1 : 0));
+               .WithArguments(args =>
+                {
+                    args
+                       .Add("-screen-width").Add(Resolution.Width)
+                       .Add("-screen-height").Add(Resolution.Height)
+                       .Add("-screen-fullscreen").Add(Fullscreen ? 1 : 0);
 
-            if (Borderless)
-                client = client.WithArguments(args => args
-                   .Add("-popupwindow"));
+                    if (Borderless)
+                        args.Add("-popupwindow");
 
-            if (Quality.SelectedQuality != Models.Quality.Default)
-                client = client.WithArguments(args => args
-                   .Add("-screen-quality").Add(Quality.SelectedQuality));
+                    if (Quality.SelectedQuality != Models.Quality.Default)
+                        args.Add("-screen-quality").Add(Quality.SelectedQuality);
+                });
 
             _ = client.ExecuteAsync();
         }
