@@ -1,0 +1,78 @@
+﻿<Window
+    x:Class="GenshinLauncher.Views.MainWindowView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
+
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:s="https://github.com/canton7/Stylet"
+
+    xmlns:viewModels="clr-namespace:GenshinLauncher.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel}"
+
+    Title="{Binding Title}"
+    Width="500" Height="450"
+    MinWidth="500" MinHeight="450"
+    ui:WindowHelper.UseModernWindowStyle="True"
+    ui:TitleBar.ExtendViewIntoTitleBar="True">
+
+    <Window.Resources>
+        <Style TargetType="ui:NumberBox">
+            <Setter Property="SpinButtonPlacementMode" Value="Compact" />
+            <Setter Property="Minimum" Value="0" />
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer Margin="30">
+        <ui:SimpleStackPanel>
+            <TextBlock
+                Style="{StaticResource TitleTextBlockStyle}"
+                Text="{Binding Title}" />
+
+            <ui:SimpleStackPanel Orientation="Horizontal">
+                <ui:ToggleSwitch
+                    Header="Fullscreen"
+                    IsOn="{Binding Fullscreen}" />
+
+                <ui:ToggleSwitch
+                    Header="Borderless"
+                    IsOn="{Binding Borderless}" />
+            </ui:SimpleStackPanel>
+
+            <GroupBox Header="Quality">
+                <ComboBox ItemsSource="{Binding Quality.Qualities}"
+                          SelectedItem="{Binding Quality.SelectedQuality}" />
+            </GroupBox>
+
+            <ui:SimpleStackPanel Orientation="Horizontal">
+                <GroupBox Header="Resolution">
+                    <ui:SimpleStackPanel Orientation="Horizontal">
+                        <ui:NumberBox Header="Width" Value="{Binding Resolution.Width}" />
+                        <ui:NumberBox Header="Height" Value="{Binding Resolution.Height}" />
+                    </ui:SimpleStackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Preset">
+                    <ComboBox
+                        Margin="0,25,0,0"
+                        ItemsSource="{x:Static viewModels:Resolution.Presets}"
+                        SelectedItem="{Binding Resolution}" />
+                </GroupBox>
+            </ui:SimpleStackPanel>
+
+            <ui:SimpleStackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Right">
+                <Button Command="{s:Action LaunchGame}"
+                        Content="Launch Game" />
+
+                <Button Command="{s:Action LaunchSelector}"
+                        Content="Controller Settings" />
+
+                <Button Command="{s:Action RequestClose}"
+                        Content="Exit" />
+            </ui:SimpleStackPanel>
+        </ui:SimpleStackPanel>
+    </ScrollViewer>
+</Window>
