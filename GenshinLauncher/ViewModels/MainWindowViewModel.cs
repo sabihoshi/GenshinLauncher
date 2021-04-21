@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
 using CliWrap;
 using Stylet;
@@ -13,10 +14,6 @@ namespace GenshinLauncher.ViewModels
             Resolution = Resolution.Presets.Last();
         }
 
-        public bool Fullscreen { get; set; } = true;
-
-        public bool Borderless { get; set; }
-
         public Command Client => Cli.Wrap(GenshinLocation);
 
         public QualityViewModel Quality { get; }
@@ -25,12 +22,18 @@ namespace GenshinLauncher.ViewModels
 
         public string Title { get; } = "Genshin Impact Launcher";
 
+        [UserScopedSetting]
         public string GenshinLocation { get; set; } =
             @"C:\Program Files\Genshin Impact\Genshin Impact Game\GenshinImpact.exe";
 
         public async Task<CommandResult> LaunchSelector() =>
             await Client.WithArguments("-show-screen-selector")
                .ExecuteAsync();
+
+        protected override void OnClose()
+        {
+            Config.Default.Save();
+        }
 
         public void LaunchGame()
         {
@@ -40,9 +43,9 @@ namespace GenshinLauncher.ViewModels
                     args
                        .Add("-screen-width").Add(Resolution.Width)
                        .Add("-screen-height").Add(Resolution.Height)
-                       .Add("-screen-fullscreen").Add(Fullscreen ? 1 : 0);
+                       .Add("-screen-fullscreen").Add(Config.Default.Fullscreen ? 1 : 0);
 
-                    if (Borderless)
+                    if (Config.Default.Borderless)
                         args.Add("-popupwindow");
 
                     if (Quality.SelectedQuality != Models.Quality.Default)

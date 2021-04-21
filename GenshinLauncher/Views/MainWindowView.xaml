@@ -9,6 +9,7 @@
     xmlns:s="https://github.com/canton7/Stylet"
 
     xmlns:viewModels="clr-namespace:GenshinLauncher.ViewModels"
+    xmlns:genshinLauncher="clr-namespace:GenshinLauncher"
     d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel}"
 
     Title="{Binding Title}"
@@ -18,6 +19,7 @@
     ui:TitleBar.ExtendViewIntoTitleBar="True">
 
     <Window.Resources>
+        <genshinLauncher:Config x:Key="Config" />
         <Style TargetType="ui:NumberBox">
             <Setter Property="SpinButtonPlacementMode" Value="Compact" />
             <Setter Property="Minimum" Value="0" />
@@ -33,11 +35,11 @@
             <ui:SimpleStackPanel Orientation="Horizontal">
                 <ui:ToggleSwitch
                     Header="Fullscreen"
-                    IsOn="{Binding Fullscreen}" />
+                    IsOn="{Binding Default.Fullscreen, Source={StaticResource Config}}" />
 
                 <ui:ToggleSwitch
                     Header="Borderless"
-                    IsOn="{Binding Borderless}" />
+                    IsOn="{Binding Default.Borderless, Source={StaticResource Config}}" />
             </ui:SimpleStackPanel>
 
             <GroupBox Header="Quality">

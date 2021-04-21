@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/sabihoshi/GenshinLauncher</RepositoryUrl>
     <Description>A Genshin Impact launcher with more options in Modern Fluent UI.</Description>
     <ApplicationIcon>GenshinImpactIcon.ico</ApplicationIcon>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +27,21 @@
     <None Include="..\LICENSE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Config.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Config.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Config.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Config.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
 </Project>
