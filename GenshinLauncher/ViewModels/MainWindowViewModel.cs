@@ -20,30 +20,25 @@ namespace GenshinLauncher.ViewModels
 
         public Resolution Resolution { get; set; }
 
-        public string Title { get; } = "Genshin Impact Launcher";
-
         [UserScopedSetting]
         public string GenshinLocation { get; set; } =
             @"C:\Program Files\Genshin Impact\Genshin Impact Game\GenshinImpact.exe";
 
+        public string Title { get; } = "Genshin Impact Launcher";
+
         public async Task<CommandResult> LaunchSelector() =>
             await Client.WithArguments("-show-screen-selector")
-               .ExecuteAsync();
-
-        protected override void OnClose()
-        {
-            Config.Default.Save();
-        }
+                .ExecuteAsync();
 
         public void LaunchGame()
         {
             var client = Client
-               .WithArguments(args =>
+                .WithArguments(args =>
                 {
                     args
-                       .Add("-screen-width").Add(Resolution.Width)
-                       .Add("-screen-height").Add(Resolution.Height)
-                       .Add("-screen-fullscreen").Add(Config.Default.Fullscreen ? 1 : 0);
+                        .Add("-screen-width").Add(Resolution.Width)
+                        .Add("-screen-height").Add(Resolution.Height)
+                        .Add("-screen-fullscreen").Add(Config.Default.Fullscreen ? 1 : 0);
 
                     if (Config.Default.Borderless)
                         args.Add("-popupwindow");

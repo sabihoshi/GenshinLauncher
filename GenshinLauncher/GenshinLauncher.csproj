@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/sabihoshi/GenshinLauncher</RepositoryUrl>
     <Description>A Genshin Impact launcher with more options in Modern Fluent UI.</Description>
     <ApplicationIcon>GenshinImpactIcon.ico</ApplicationIcon>
-    <Version>1.1.0</Version>
+    <Version>1.1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

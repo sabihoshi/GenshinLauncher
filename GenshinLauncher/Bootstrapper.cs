@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Navigation;
 using GenshinLauncher.ViewModels;
 using Stylet;
@@ -24,10 +23,6 @@ namespace GenshinLauncher
                     });
                 })
             );
-
-            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-            {
-            }
         }
     }
 }
