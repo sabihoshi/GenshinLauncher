@@ -12,9 +12,9 @@
     xmlns:genshinLauncher="clr-namespace:GenshinLauncher"
     d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel}"
 
-    Title="{Binding Title}"
-    Width="500" Height="450"
-    MinWidth="500" MinHeight="450"
+    Title="{x:Static viewModels:MainWindowViewModel.Title}"
+    Width="500" Height="600"
+    MinWidth="500" MinHeight="600"
     ui:WindowHelper.UseModernWindowStyle="True"
     ui:TitleBar.ExtendViewIntoTitleBar="True">
 
@@ -30,7 +30,7 @@
         <ui:SimpleStackPanel>
             <TextBlock
                 Style="{StaticResource TitleTextBlockStyle}"
-                Text="{Binding Title}" />
+                Text="{x:Static viewModels:MainWindowViewModel.Title}" />
 
             <ui:SimpleStackPanel Orientation="Horizontal">
                 <ui:ToggleSwitch
@@ -62,6 +62,20 @@
                         SelectedItem="{Binding Resolution}" />
                 </GroupBox>
             </ui:SimpleStackPanel>
+            <GroupBox Header="Path">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0" Text="{Binding GenshinLocation}" TextWrapping="WrapWithOverflow" />
+                    <Button Grid.Column="1" Margin="5,0,0,0"
+                            Command="{s:Action SetLocation}">
+                        <ui:FontIcon Glyph="&#xE8E5;" />
+                    </Button>
+                </Grid>
+            </GroupBox>
 
             <ui:SimpleStackPanel
                 Orientation="Horizontal"

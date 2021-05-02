@@ -29,9 +29,6 @@
                     <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                         <Setter Property="MinWidth" Value="200" />
                     </Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                        <Setter Property="MinWidth" Value="125" />
-                    </Style>
                 </Style.Resources>
             </Style>
         </ResourceDictionary>

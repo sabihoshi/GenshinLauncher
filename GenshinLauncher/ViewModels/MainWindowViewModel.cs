@@ -1,13 +1,18 @@
-﻿using System.Configuration;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CliWrap;
+using Microsoft.Win32;
+using ModernWpf.Controls;
 using Stylet;
 
 namespace GenshinLauncher.ViewModels
 {
     public class MainWindowViewModel : Screen
     {
+        public const string Title = "Genshin Impact Launcher";
+
         public MainWindowViewModel()
         {
             Quality    = new();
@@ -20,15 +25,92 @@ namespace GenshinLauncher.ViewModels
 
         public Resolution Resolution { get; set; }
 
-        [UserScopedSetting]
-        public string GenshinLocation { get; set; } =
-            @"C:\Program Files\Genshin Impact\Genshin Impact Game\GenshinImpact.exe";
+        public string GenshinLocation { get; set; }
 
-        public string Title { get; } = "Genshin Impact Launcher";
+        private static string? InstallLocation => Registry.LocalMachine
+            .OpenSubKey(@"SOFTWARE\launcher", false)
+            ?.GetValue("InstPath") as string;
 
         public async Task<CommandResult> LaunchSelector() =>
             await Client.WithArguments("-show-screen-selector")
                 .ExecuteAsync();
+
+        protected override async void OnInitialActivate()
+        {
+            if (!TryGetLocation())
+                await LocationMissing();
+        }
+
+        private async Task LocationMissing()
+        {
+            var dialog = new ContentDialog
+            {
+                Title   = "Error",
+                Content = "Could not find Game's Location",
+
+                PrimaryButtonText   = "Find Manually...",
+                SecondaryButtonText = "Ignore",
+                CloseButtonText     = "Exit"
+            };
+
+            var result = await dialog.ShowAsync();
+
+            switch (result)
+            {
+                case ContentDialogResult.None:
+                    RequestClose();
+                    break;
+                case ContentDialogResult.Primary:
+                    await SetLocation();
+                    break;
+                case ContentDialogResult.Secondary:
+                    break;
+            }
+        }
+
+        public async Task SetLocation()
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "Executable|*.exe|All files (*.*)|*.*",
+                InitialDirectory = InstallLocation is null
+                    ? string.Empty
+                    : Path.Combine(InstallLocation, "Genshin Impact Game")
+            };
+
+            var success = openFileDialog.ShowDialog() == true;
+            var set = TrySetLocation(openFileDialog.FileName);
+
+            if (!(success && set)) await LocationMissing();
+        }
+
+        private bool TryGetLocation()
+        {
+            var location = @"C:\Program Files\Genshin Impact\Genshin Impact Game\GenshinImpact.exe";
+
+            if (TrySetLocation(location))
+                return true;
+
+            location = InstallLocation + @"\Genshin Impact Game\GenshinImpact.exe";
+
+            if (TrySetLocation(location))
+                return true;
+
+            location = AppContext.BaseDirectory + "GenshinImpact.exe";
+
+            return TrySetLocation(location);
+        }
+
+        private bool TrySetLocation(string location)
+        {
+            if (File.Exists(location))
+            {
+                GenshinLocation = location;
+                return true;
+            }
+
+            return false;
+        }
 
         public void LaunchGame()
         {
