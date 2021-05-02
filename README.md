@@ -2,9 +2,9 @@
 
 A Genshin Impact launcher  made using C# and WPF using Windows Fluent design. If you enjoyed this project, consider [contributing](https://github.com/sabihoshi/GenshinLauncher#contributing) or 🌟 starring the repository. Thank you~
 
-## **[Download latest version ![GitHub all releases](https://img.shields.io/github/downloads/sabihoshi/GenshinLauncher/total?style=social)](https://github.com/sabihoshi/GenshinLauncher/releases/latest)**
+## **[Download latest version](https://github.com/sabihoshi/GenshinLauncher/releases/latest)** ![GitHub all releases](https://img.shields.io/github/downloads/sabihoshi/GenshinLauncher/total?style=social)
 
-![GenshinLauncher_2021-04-21_19-38-11](https://user-images.githubusercontent.com/25006819/115547689-20649e00-a2d9-11eb-9e36-decd13993717.png)
+![GenshinLauncher_2021-05-02_23-22-24](https://user-images.githubusercontent.com/25006819/116818301-4887b300-ab9d-11eb-8308-86705bc15e2e.png)
 
 ## How to use
 
@@ -15,12 +15,12 @@ A Genshin Impact launcher  made using C# and WPF using Windows Fluent design. If
 * Change the set resolution of the game.
 * Set the quality preset of the game.
 * Allow for borderless fullscreen gameplay.
+* Change the location of the .exe to a custom one.
 
 ### Controller Settings
 This launches the unity screen selector for more options such as changing the joystick bindings as well as some other redundant options.
 
 ## Upcoming
-* Change the location of the .exe to a custom one.
 * Create a shortcut to auto-apply settings.
 
 ## About
