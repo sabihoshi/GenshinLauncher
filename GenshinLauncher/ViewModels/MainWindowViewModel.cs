@@ -21,11 +21,17 @@ namespace GenshinLauncher.ViewModels
             Resolution = Resolution.Presets.Last();
         }
 
-        public Command Client => Cli.Wrap(Config.Default.GenshinLocation);
+        public Command Client => Cli.Wrap(Location);
 
         public QualityViewModel Quality { get; }
 
         public Resolution Resolution { get; set; }
+
+        public string Location
+        {
+            get => Config.Default.GenshinLocation;
+            set => Config.Default.GenshinLocation = value;
+        }
 
         private static string? InstallLocation => Registry.LocalMachine
             .OpenSubKey(@"SOFTWARE\launcher", false)
@@ -89,7 +95,7 @@ namespace GenshinLauncher.ViewModels
             var locations = new[]
             {
                 // User set location
-                Config.Default.GenshinLocation,
+                Location,
 
                 // Default install location
                 @"C:\Program Files\Genshin Impact\Genshin Impact Game\GenshinImpact.exe",
@@ -108,7 +114,7 @@ namespace GenshinLauncher.ViewModels
         {
             if (File.Exists(location) && location is not null)
             {
-                Config.Default.GenshinLocation = location;
+                Location = location;
                 return true;
             }
 
