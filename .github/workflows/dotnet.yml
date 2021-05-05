@@ -1,0 +1,45 @@
+name: Release on tag
+
+on:
+  push:
+    tags: [ '*' ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+          runtime: ["win-x64", "win-x86"]
+
+    steps:
+    - name: Get tag version
+      id: tag
+      shell: bash
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+    - uses: actions/checkout@v2.3.4
+
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1.7.2
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Publish with dotnet
+      run: dotnet publish GenshinLauncher.WPF -r ${{ matrix.runtime }} -c Release -o .\output --self-contained false -p:PublishSingleFile=true
+
+    - name: Zip release
+      run: 7z a GenshinLauncher_${{ steps.tag.outputs.VERSION }}_${{ matrix.runtime }}.zip .\output\*
+
+    - name: 7Zip release
+      run: 7z a GenshinLauncher_${{ steps.tag.outputs.VERSION }}_${{ matrix.runtime }}.7z .\output\*
+
+    - name: Create Release
+      uses: ncipollo/release-action@v1.8.4
+      with:
+          allowUpdates: true
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
+          artifacts: ./GenshinLauncher_${{ steps.tag.outputs.VERSION }}_${{ matrix.runtime }}.zip,./GenshinLauncher_${{ steps.tag.outputs.VERSION }}_${{ matrix.runtime }}.7z
+          artifactContentType: application/zip
+          token: ${{ secrets.GITHUB_TOKEN }}
