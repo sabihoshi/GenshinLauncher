@@ -10,6 +10,7 @@
 
     xmlns:viewModels="clr-namespace:GenshinLauncher.ViewModels"
     xmlns:genshinLauncher="clr-namespace:GenshinLauncher"
+    xmlns:models="clr-namespace:GenshinLauncher.Models"
     d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel}"
 
     Title="{x:Static viewModels:MainWindowViewModel.Title}"
@@ -58,7 +59,7 @@
                 <GroupBox Header="Preset">
                     <ComboBox
                         Margin="0,25,0,0"
-                        ItemsSource="{x:Static viewModels:Resolution.Presets}"
+                        ItemsSource="{x:Static models:Resolution.Presets}"
                         SelectedItem="{Binding Resolution}" />
                 </GroupBox>
             </ui:SimpleStackPanel>
@@ -69,7 +70,10 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0" Text="{Binding GenshinLocation}" TextWrapping="WrapWithOverflow" />
+                    <TextBox Grid.Column="0" TextWrapping="WrapWithOverflow" 
+                             PreviewMouseDown="{s:Action SetLocation}" IsReadOnly="True"
+                             Text="{Binding Default.GenshinLocation, Source={StaticResource Config}, Mode=OneWay}"  />
+
                     <Button Grid.Column="1" Margin="5,0,0,0"
                             Command="{s:Action SetLocation}">
                         <ui:FontIcon Glyph="&#xE8E5;" />

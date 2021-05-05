@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GenshinLauncher.ViewModels
+namespace GenshinLauncher.Models
 {
     public class Resolution
     {
@@ -28,9 +28,9 @@ namespace GenshinLauncher.ViewModels
             Height = height;
         }
 
-        public int Width { get; set; }
-
         public int Height { get; set; }
+
+        public int Width { get; set; }
 
         public override string ToString() => $"{Width}x{Height}";
     }

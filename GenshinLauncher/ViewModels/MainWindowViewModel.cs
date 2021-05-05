@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CliWrap;
+using GenshinLauncher.Models;
 using Microsoft.Win32;
 using ModernWpf.Controls;
 using Stylet;
@@ -19,13 +21,11 @@ namespace GenshinLauncher.ViewModels
             Resolution = Resolution.Presets.Last();
         }
 
-        public Command Client => Cli.Wrap(GenshinLocation);
+        public Command Client => Cli.Wrap(Config.Default.GenshinLocation);
 
         public QualityViewModel Quality { get; }
 
         public Resolution Resolution { get; set; }
-
-        public string GenshinLocation { get; set; }
 
         private static string? InstallLocation => Registry.LocalMachine
             .OpenSubKey(@"SOFTWARE\launcher", false)
@@ -86,33 +86,36 @@ namespace GenshinLauncher.ViewModels
 
         private bool TryGetLocation()
         {
-            var location = @"C:\Program Files\Genshin Impact\Genshin Impact Game\GenshinImpact.exe";
+            var locations = new[]
+            {
+                // User set location
+                Config.Default.GenshinLocation,
 
-            if (TrySetLocation(location))
-                return true;
+                // Default install location
+                @"C:\Program Files\Genshin Impact\Genshin Impact Game\GenshinImpact.exe",
 
-            location = InstallLocation + @"\Genshin Impact Game\GenshinImpact.exe";
+                // Custom install location
+                Path.Combine(InstallLocation ?? string.Empty, @"Genshin Impact Game\GenshinImpact.exe"),
 
-            if (TrySetLocation(location))
-                return true;
+                // Relative location
+                AppContext.BaseDirectory + "GenshinImpact.exe"
+            };
 
-            location = AppContext.BaseDirectory + "GenshinImpact.exe";
-
-            return TrySetLocation(location);
+            return locations.Any(TrySetLocation);
         }
 
-        private bool TrySetLocation(string location)
+        private bool TrySetLocation(string? location)
         {
-            if (File.Exists(location))
+            if (File.Exists(location) && location is not null)
             {
-                GenshinLocation = location;
+                Config.Default.GenshinLocation = location;
                 return true;
             }
 
             return false;
         }
 
-        public void LaunchGame()
+        public async Task LaunchGame()
         {
             var client = Client
                 .WithArguments(args =>
@@ -129,7 +132,18 @@ namespace GenshinLauncher.ViewModels
                         args.Add("-screen-quality").Add(Quality.SelectedQuality);
                 });
 
-            _ = client.ExecuteAsync();
+            try
+            {
+                await client.ExecuteAsync();
+            }
+            catch (InvalidOperationException _)
+            {
+                await LocationMissing();
+            }
+            catch (Win32Exception _)
+            {
+                await LocationMissing();
+            }
         }
     }
 }
