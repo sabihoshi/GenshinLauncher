@@ -142,11 +142,11 @@ namespace GenshinLauncher.ViewModels
             {
                 await client.ExecuteAsync();
             }
-            catch (InvalidOperationException _)
+            catch (InvalidOperationException)
             {
                 await LocationMissing();
             }
-            catch (Win32Exception _)
+            catch (Win32Exception)
             {
                 await LocationMissing();
             }
