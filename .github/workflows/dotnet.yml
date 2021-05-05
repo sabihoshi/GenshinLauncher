@@ -26,7 +26,7 @@ jobs:
         dotnet-version: 5.0.x
 
     - name: Publish with dotnet
-      run: dotnet publish GenshinLauncher.WPF -r ${{ matrix.runtime }} -c Release -o .\output --self-contained false -p:PublishSingleFile=true
+      run: dotnet publish -r ${{ matrix.runtime }} -c Release -o .\output --self-contained false -p:PublishSingleFile=true
 
     - name: Zip release
       run: 7z a GenshinLauncher_${{ steps.tag.outputs.VERSION }}_${{ matrix.runtime }}.zip .\output\*
