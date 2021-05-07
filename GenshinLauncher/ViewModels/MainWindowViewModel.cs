@@ -18,7 +18,7 @@ namespace GenshinLauncher.ViewModels
         public MainWindowViewModel()
         {
             Quality    = new();
-            Resolution = Resolution.Presets.Last();
+            Resolution = GetLastResolution();
         }
 
         public Command Client => Cli.Wrap(Location);
@@ -88,6 +88,20 @@ namespace GenshinLauncher.ViewModels
             var set = TrySetLocation(openFileDialog.FileName);
 
             if (!(success && set)) await LocationMissing();
+        }
+
+        private Resolution GetLastResolution()
+        {
+            var config = Registry.CurrentUser
+                .OpenSubKey(@"SOFTWARE\miHoYo\Genshin Impact", false);
+
+            var w = config.GetValue(@"Screenmanager Resolution Width_h182942802");
+            var h = config.GetValue(@"Screenmanager Resolution Height_h2627697771");
+
+            if (w is int width && h is int height)
+                return Resolution.GetResolution(width, height);
+
+            return Resolution.Presets.Last();
         }
 
         private bool TryGetLocation()
